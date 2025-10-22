@@ -9,6 +9,7 @@ ENDIF (WIN32)
 IF (COMMAND CMAKE_POLICY)
     CMAKE_POLICY (SET CMP0003 NEW)
     CMAKE_POLICY (SET CMP0004 NEW)
+    CMAKE_POLICY (SET CMP0007 NEW)
     #CMAKE_POLICY (SET CMP0148 NEW)
 ENDIF (COMMAND CMAKE_POLICY)
 
@@ -34,8 +35,8 @@ INCLUDE (${PLAYER_CMAKE_DIR}/internal/FindOS.cmake)
 IF (NOT PLAYER_OS_WIN AND NOT PLAYER_OS_SOLARIS)
     # Using -Wall on Windows causes MSVC to produce thousands of warnings in its
     # own standard headers, dramatically slowing down the build.
-    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
-    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -lboost_system -Wno-incompatible-pointer-types -Wno-int-conversion -Wno-implicit-function-declaration")
+    SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -lboost_system -fpermissive")
 ENDIF (NOT PLAYER_OS_WIN AND NOT PLAYER_OS_SOLARIS)
 
 # Check the compiler version is OK
@@ -53,6 +54,7 @@ INCLUDE (${PLAYER_CMAKE_DIR}/internal/SearchForStuff.cmake)
 # Find and use OpenCV directories
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
+set (OpenCV_DIR /usr/lib64/cmake/opencv4/)
 # Give the user some compile options
 INCLUDE (${PLAYER_CMAKE_DIR}/internal/GeneralCompileOptions.cmake)
 # Write the config.h file
